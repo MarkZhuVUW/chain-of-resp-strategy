@@ -1,27 +1,37 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Log parsing service",
-    "description": "Log parsing service API",
+    "title": "Checkout service",
+    "description": "Checkout service API",
     "version": "${version}"
   },
 
   "paths": {
-    "/analytics": {
+    "/shoppingCarts/{shoppingCartId}/totalPrice": {
       "get": {
         "tags": [
-          "analytics"
+          "checkout"
         ],
-        "description": "get flow log analytics including number of unique ip addresses, top 3 most active ip addresses",
-        "operationId": "getAnalytics",
+        "description": "Get total price in cart",
+        "operationId": "getTotalPrice",
         "parameters": [
           {
-            "name": "log-file-name",
+            "name": "shoppingCartId",
+            "in": "path",
+            "required": true,
+            "description": "Uuid of the shopping cart.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "pricingTier",
             "in": "query",
             "required": true,
-            "description": "Name of the log file to analyze",
+            "description": "pricing tier",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/PricingTier"
             }
           }
         ],
@@ -31,13 +41,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetAnalyticsResponse"
+                  "$ref": "#/components/schemas/GetTotalPriceResponse"
                 }
               }
             }
           },
           "default": {
-            "description": "Error occurred when simulating",
+            "description": "Unexpected Error occurred",
             "content": {
               "application/json": {
                 "schema": {
@@ -52,33 +62,73 @@
   },
   "components": {
     "schemas": {
-      "GetAnalyticsResponse": {
+      "PricingTier": {
+        "type": "string",
+        "enum": [
+          "Beginner",
+          "Premium"
+        ]
+      },
+      "GetTotalPriceResponse": {
         "type": "object",
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/AnalyticsDto"
+          "totalPrice": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
-      "AnalyticsDto": {
+      "ShoppingCartDto": {
         "type": "object",
         "properties": {
-          "numUniqueIpAddresses": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemDto"
+            }
+          }
+        }
+      },
+      "PriceRule": {
+        "type": "string",
+        "enum": [
+          "MultiPrice"
+        ]
+      },
+      "SpecialDto": {
+        "type": "object",
+        "properties": {
+          "hitQuantity": {
             "type": "integer"
           },
-          "top3MostActiveIpAddresses": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string"
-            }
+          "specialPrice": {
+            "type": "number",
+            "format": "double"
           },
-          "top3MostVisitedUrls": {
-            "type": "array",
-            "uniqueItems": true,
-            "items": {
-              "type": "string"
-            }
+          "priceRule": {
+            "$ref": "#/components/schemas/PriceRule"
+          }
+        }
+      },
+      "ItemDto": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "SpecialDto": {
+            "$ref": "#/components/schemas/SpecialDto"
           }
         }
       },

@@ -1,0 +1,25 @@
+logging:
+  level:
+    root: INFO
+info:
+  app:
+    name: 'checkout'
+    description: 'checkout'
+    version: '{version}'
+server:
+  port: 80
+  servlet:
+    context-path: '/checkout-api'
+  compression:
+    enabled: true
+  tomcat:
+    max-threads: 400
+    mbeanregistry:
+      enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: '/status' # health check endpoint.
+

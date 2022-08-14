@@ -11,10 +11,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
-        <module>log-file-parser-api</module>
+        <module>checkout-api</module>
     </modules>
     <groupId>net.markz</groupId>
-    <artifactId>log-file-parser</artifactId>
+    <artifactId>checkout</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
@@ -237,7 +237,7 @@
                 <spring.profiles.active>local</spring.profiles.active>
             </properties>
             <modules>
-                <module>log-file-parser-api</module>
+                <module>checkout-api</module>
             </modules>
         </profile>
 
