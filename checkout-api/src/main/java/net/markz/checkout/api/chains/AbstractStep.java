@@ -9,6 +9,7 @@ public abstract class AbstractStep<T, E> {
     protected abstract Logger getLogger();
     protected abstract String getClassName();
 
+
     public void tryProcess(final Context<T> context, final Response<E> response) {
         try {
             process(context, response);
